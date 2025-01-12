@@ -32,11 +32,11 @@ process_domain() {
     assetfinder -subs-only $domain | tee $base_path/subdomain/assetfinder.txt
     findomain -t $domain | tee $base_path/subdomain/findomain.txt
     amass enum -passive -d $domain -o $base_path/subdomain/amass_sub_passive.txt
-    curl --insecure --silent "http://web.archive.org/cdx/search/cdx?url=*.$domain/*&output=text&fl=original&collapse=urlkey" | sed -e 's_https*://__' -e 's/\/.*//' -e 's/^www\.//' | sed "/@/d" | sed -e 's/\.$//' | sort -u | tee $base_path/subdomain/web.archive.txt
-    curl -s "https://crt.sh/?q=%25.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u | tee $base_path/subdomain/crtsub.txt
-    curl -s "https://riddler.io/search/exportcsv?q=pld:$domain" | grep -Po "(([\w.-]*)\.([\w]*)\.([A-z]))\w+" | sort -u | tee $base_path/subdomain/riddlersub.txt
-    curl -s https://dns.bufferover.run/dns?q=.$domain |jq -r .FDNS_A[]|cut -d',' -f2|sort -u | tee $base_path/subdomain/bufferoversub.txt
-    curl -s "https://jldc.me/anubis/subdomains/$domain" | grep -Po "(([http|https]:\/\/)?([\w.-]*)\.([\w]*)\.([A-z]))\w+" | sort -u | tee $base_path/subdomain/jldcsub.txt
+   # curl --insecure --silent "http://web.archive.org/cdx/search/cdx?url=*.$domain/*&output=text&fl=original&collapse=urlkey" | sed -e 's_https*://__' -e 's/\/.*//' -e 's/^www\.//' | sed "/@/d" | sed -e 's/\.$//' | sort -u | tee $base_path/subdomain/web.archive.txt
+   # curl -s "https://crt.sh/?q=%25.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u | tee $base_path/subdomain/crtsub.txt
+   # curl -s "https://riddler.io/search/exportcsv?q=pld:$domain" | grep -Po "(([\w.-]*)\.([\w]*)\.([A-z]))\w+" | sort -u | tee $base_path/subdomain/riddlersub.txt
+  #  curl -s https://dns.bufferover.run/dns?q=.$domain |jq -r .FDNS_A[]|cut -d',' -f2|sort -u | tee $base_path/subdomain/bufferoversub.txt
+   # curl -s "https://jldc.me/anubis/subdomains/$domain" | grep -Po "(([http|https]:\/\/)?([\w.-]*)\.([\w]*)\.([A-z]))\w+" | sort -u | tee $base_path/subdomain/jldcsub.txt
     sed -ne 's/^\( *\)Subject:/\1/p;/X509v3 Subject Alternative Name/{
 N;s/^.*\n//;:a;s/^\( *\)\(.*\), /\1\2\n\1/;ta;p;q; }' < <(
 openssl x509 -noout -text -in <(
