@@ -97,8 +97,13 @@ gospider -S /root/PH-Recon/$domain/subdomain/good/active_subdomain.txt -c 10 -d 
 cat /root/PH-Recon/$domain/subdomain/good/active_subdomain.txt | xargs -n 1 -I {} python3 /root/OK-VPS/tools/ParamSpider/paramspider.py --domain {} --level high  | grep -o 'https\?://[^ ]\+' > /root/PH-Recon/$domain/url/all_spiderparamters.txt
 cd /root/PH-Recon/$domain/url && ./web_archive_urls.sh /root/PH-Recon/$domain/subdomain/good/active_subdomain.txt
 cat /root/PH-Recon/$domain/url/*.txt > /root/PH-Recon/$domain/url/all-url.txt
-cat /root/PH-Recon/$domain/url/all-url.txt | sort --unique | grep $domain | tee /root/PH-Recon/$domain/url/final-url.txt
-cat /root/PH-Recon/$domain/url/final-url.txt | egrep -v "\.woff|\.ttf|\.svg|\.eot|\.png|\.jpep|\.svg|\.css|\.ico" | sed 's/:88//9;s/:443//g' | sort -u >> /root/PH-Recon/$domain/url/valid_urls.txt
+
+#cat /root/PH-Recon/$domain/url/all-url.txt | sort --unique | grep $domain | tee /root/PH-Recon/$domain/url/final-url.txt
+cat /root/PH-Recon/$domain/url/all-url.txt | sort --unique | grep '\?.*=' | grep $domain | tee /root/PH-Recon/$domain/url/final-url.txt
+
+#cat /root/PH-Recon/$domain/url/final-url.txt | egrep -v "\.woff|\.ttf|\.svg|\.eot|\.png|\.jpep|\.svg|\.css|\.ico" | sed 's/:88//g;s/:443//g' | sort -u >> /root/PH-Recon/$domain/url/valid_urls.txt
+cat /root/PH-Recon/$domain/url/final-url.txt | egrep -v "\.woff|\.ttf|\.svg|\.eot|\.png|\.jpeg|\.svg|\.css|\.ico" | sed 's/:88//g;s/:443//g' | sort -u > /root/PH-Recon/$domain/url/valid_urls.txt
+
 done
 }
 find_urls
