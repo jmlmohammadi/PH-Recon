@@ -143,7 +143,7 @@ SQL(){
 for domain in $(cat $host);
 do
 mrco24-error-sql -f /root/PH-Recon/$domain/url/valid_urls.txt -t 40 -o /root/PH-Recon/$domain/sql/error-sql-injection.txt -v
-sqlmap -m /root/PH-Recon/$domain/url/valid_urls.txt --batch --risk 3  --random-agent | tee -a /root/PH-Recon/$domain/sql/sqlmap_sql_url.txt
+sqlmap -m /root/PH-Recon/$domain/url/valid_urls.txt --batch --risk 3  --level 3 --threads 5  --tamper=randomcase,space2comment,appendnullbyte --random-agent | tee -a /root/PH-Recon/$domain/sql/sqlmap_sql_url.txt
 done
 }
 SQL
